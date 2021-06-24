@@ -5,12 +5,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -69,17 +72,21 @@ public class NotesListFragment extends Fragment {
 
             View itemView = LayoutInflater.from(requireContext()).inflate(R.layout.item_note, notesList, false);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (onNoteClicked != null) {
-                        onNoteClicked.onNoteClicked(note);
-                    }
+            itemView.setOnClickListener(view1 -> {
+                if (onNoteClicked != null) {
+                    onNoteClicked.onNoteClicked(note);
                 }
             });
 
             TextView noteName = itemView.findViewById(R.id.note_name);
             noteName.setText(note.getNoteName());
+
+            ImageView image = itemView.findViewById(R.id.image);
+
+            Glide.with(this)
+                    .load(note.getUrl())
+                    .centerCrop()
+                    .into(image);
 
             notesList.addView(itemView);
         }

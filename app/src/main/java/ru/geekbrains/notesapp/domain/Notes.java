@@ -7,6 +7,8 @@ import androidx.annotation.StringRes;
 
 public class Notes implements Parcelable {
 
+    private final String id;
+
     @StringRes
     private final int noteName;
 
@@ -16,16 +18,14 @@ public class Notes implements Parcelable {
     @StringRes
     private final int creationDate;
 
-    public Notes(int noteName, int noteContent, int creationDate) {
-        this.noteName = noteName;
-        this.noteContent = noteContent;
-        this.creationDate = creationDate;
-    }
+    private final String url;
 
     protected Notes(Parcel in) {
+        id = in.readString();
         noteName = in.readInt();
         noteContent = in.readInt();
         creationDate = in.readInt();
+        url = in.readString();
     }
 
     public static final Creator<Notes> CREATOR = new Creator<Notes>() {
@@ -40,6 +40,10 @@ public class Notes implements Parcelable {
         }
     };
 
+    public String getId() {
+        return id;
+    }
+
     public int getNoteName() {
         return noteName;
     }
@@ -52,6 +56,18 @@ public class Notes implements Parcelable {
         return creationDate;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public Notes(String id, int noteName, int noteContent, int creationDate, String url) {
+        this.id = id;
+        this.noteName = noteName;
+        this.noteContent = noteContent;
+        this.creationDate = creationDate;
+        this.url = url;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -59,8 +75,10 @@ public class Notes implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
         parcel.writeInt(noteName);
         parcel.writeInt(noteContent);
         parcel.writeInt(creationDate);
+        parcel.writeString(url);
     }
 }
