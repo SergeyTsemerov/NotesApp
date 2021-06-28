@@ -1,20 +1,20 @@
 package ru.geekbrains.notesapp.ui.list;
 
-import android.content.Context;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-
+import java.util.Collections;
 import java.util.List;
 
 import ru.geekbrains.notesapp.R;
@@ -23,35 +23,31 @@ import ru.geekbrains.notesapp.domain.NotesRepository;
 
 public class NotesListFragment extends Fragment {
 
-    public interface OnNoteClicked {
-        void onNoteClicked(Notes note);
-    }
-
     private NotesRepository notesRepository;
+    private NotesAdapter notesAdapter;
 
-    private OnNoteClicked onNoteClicked;
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-        if (context instanceof OnNoteClicked) {
-            onNoteClicked = (OnNoteClicked) context;
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-        onNoteClicked = null;
-    }
+    private int longClickedIndex;
+    private Notes longClickedNote;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         notesRepository = new NotesRepository();
+
+        notesAdapter = new NotesAdapter(this);
+
+        notesAdapter.setOnNoteClicked(note -> {
+            if (requireActivity() instanceof NotesAdapter.OnNoteClicked) {
+                NotesAdapter.OnNoteClicked noteClicked = (NotesAdapter.OnNoteClicked) requireActivity();
+                noteClicked.onNoteClicked(note);
+            }
+        });
+
+        notesAdapter.setOnNoteLongClicked((note, index) -> {
+            longClickedIndex = index;
+            longClickedNote = note;
+        });
     }
 
     @Nullable
@@ -64,41 +60,68 @@ public class NotesListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        LinearLayout notesList = view.findViewById(R.id.notes_list_container);
+        Toolbar toolbar = view.findViewById(R.id.right_menu_toolbar);
+        RecyclerView notesList = view.findViewById(R.id.notes_list_container);
+
+        toolbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.add_btn) {
+
+                Notes addedNote = notesRepository.add("Новая заметка", R.string.new_note_content, R.string.new_note_creation_date, "https://cdn.pixabay.com/photo/2021/05/14/15/17/mountain-6253669__340.jpg");
+
+                int index = notesAdapter.add(addedNote);
+
+                notesAdapter.notifyItemInserted(index);
+
+                notesList.scrollToPosition(index);
+
+                return true;
+            }
+
+            if (item.getItemId() == R.id.clear_btn) {
+                notesRepository.clear();
+
+                notesAdapter.setData(Collections.emptyList());
+
+                notesAdapter.notifyDataSetChanged();
+
+                return true;
+            }
+            return false;
+        });
+
+        notesList.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         List<Notes> notes = notesRepository.getNotes();
 
-        for (Notes note : notes) {
+        notesAdapter.setData(notes);
 
-            View itemView = LayoutInflater.from(requireContext()).inflate(R.layout.item_note, notesList, false);
+        notesList.setAdapter(notesAdapter);
+    }
 
-            itemView.setOnClickListener(view1 -> {
-                if (onNoteClicked != null) {
-                    onNoteClicked.onNoteClicked(note);
-                }
-            });
+    @Override
+    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
 
-            TextView noteName = itemView.findViewById(R.id.note_name);
-            noteName.setText(note.getNoteName());
+        requireActivity().getMenuInflater().inflate(R.menu.menu_notes_context, menu);
+    }
 
-            ImageView image = itemView.findViewById(R.id.image);
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.update_btn) {
 
-            Glide.with(this)
-                    .load(note.getUrl())
-                    .centerCrop()
-                    .into(image);
 
-            notesList.addView(itemView);
+            return true;
         }
-    }
+        if (item.getItemId() == R.id.delete_btn) {
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
+            notesRepository.remove(longClickedNote);
 
-    @Override
-    public void onStop() {
-        super.onStop();
+            notesAdapter.remove(longClickedNote);
+
+            notesAdapter.notifyItemRemoved(longClickedIndex);
+
+            return true;
+        }
+        return super.onContextItemSelected(item);
     }
 }
