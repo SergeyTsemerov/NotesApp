@@ -13,10 +13,12 @@ import com.google.android.material.navigation.NavigationView;
 
 import ru.geekbrains.notesapp.R;
 import ru.geekbrains.notesapp.domain.Notes;
+import ru.geekbrains.notesapp.domain.NotesRepository;
 import ru.geekbrains.notesapp.ui.details.NotesDetailsFragment;
+import ru.geekbrains.notesapp.ui.list.NotesAdapter;
 import ru.geekbrains.notesapp.ui.list.NotesListFragment;
 
-public class MainActivity extends AppCompatActivity implements NotesListFragment.OnNoteClicked {
+public class MainActivity extends AppCompatActivity implements NotesAdapter.OnNoteClicked {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,4 +82,6 @@ public class MainActivity extends AppCompatActivity implements NotesListFragment
                     .commit();
         }
     }
+
+
 }
