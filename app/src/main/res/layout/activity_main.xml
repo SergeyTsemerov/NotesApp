@@ -34,7 +34,7 @@
             android:name="ru.geekbrains.notesapp.ui.list.NotesListFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/list_toolbar_divider"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
             tools:context=".ui.MainActivity" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

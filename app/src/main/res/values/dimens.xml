@@ -2,6 +2,7 @@
 <resources>
     <dimen name="default_padding">18dp</dimen>
     <dimen name="note_name_text_size">25sp</dimen>
-    <dimen name="list_toolbar_divider">56dp</dimen>
     <dimen name="about_text_size">25sp</dimen>
+    <dimen name="img_height">200dp</dimen>
+    <dimen name="menu_header_height">220dp</dimen>
 </resources>

@@ -40,6 +40,7 @@ public class NotesDetailsFragment extends Fragment {
         TextView noteName = view.findViewById(R.id.note_name);
         EditText noteContent = view.findViewById(R.id.note_content);
 
+        assert getArguments() != null;
         Notes notes = getArguments().getParcelable(ARG_NOTE);
 
         noteName.setText(notes.getNoteName());

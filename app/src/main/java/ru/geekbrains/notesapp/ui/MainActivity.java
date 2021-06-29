@@ -1,26 +1,24 @@
 package ru.geekbrains.notesapp.ui;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
 import ru.geekbrains.notesapp.R;
 import ru.geekbrains.notesapp.domain.Notes;
-import ru.geekbrains.notesapp.ui.details.NotesDetailsActivity;
+import ru.geekbrains.notesapp.domain.NotesRepository;
 import ru.geekbrains.notesapp.ui.details.NotesDetailsFragment;
+import ru.geekbrains.notesapp.ui.list.NotesAdapter;
 import ru.geekbrains.notesapp.ui.list.NotesListFragment;
 
-public class MainActivity extends AppCompatActivity implements NotesListFragment.OnNoteClicked {
+public class MainActivity extends AppCompatActivity implements NotesAdapter.OnNoteClicked {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,25 +35,30 @@ public class MainActivity extends AppCompatActivity implements NotesListFragment
 
         NavigationView navigationView = findViewById(R.id.navigation_view);
 
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                drawerLayout.closeDrawer(GravityCompat.START);
+        navigationView.setNavigationItemSelectedListener(item -> {
+            drawerLayout.closeDrawer(GravityCompat.START);
 
-                if (item.getItemId() == R.id.settings) {
-                    Toast.makeText(MainActivity.this, "'Settings' button pressed!", Toast.LENGTH_SHORT).show();
-                    return true;
-                }
-                if (item.getItemId() == R.id.about) {
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.notes_list_fragment, new AboutButtonFragment())
-                            .addToBackStack(null)
-                            .commit();
-                    return true;
-                }
-                return false;
+            if (item.getItemId() == R.id.settings) {
+                Toast.makeText(MainActivity.this, "'Settings' button pressed!", Toast.LENGTH_SHORT).show();
+                return true;
             }
+            if (item.getItemId() == R.id.about) {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.notes_list_fragment, new AboutButtonFragment())
+                        .addToBackStack(null)
+                        .commit();
+                return true;
+            }
+            if (item.getItemId() == R.id.main_screen) {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.notes_list_fragment ,new NotesListFragment())
+                        .addToBackStack(null)
+                        .commit();
+                return true;
+            }
+            return false;
         });
     }
 
@@ -79,4 +82,6 @@ public class MainActivity extends AppCompatActivity implements NotesListFragment
                     .commit();
         }
     }
+
+
 }

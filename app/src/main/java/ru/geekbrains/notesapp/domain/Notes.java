@@ -7,8 +7,9 @@ import androidx.annotation.StringRes;
 
 public class Notes implements Parcelable {
 
-    @StringRes
-    private final int noteName;
+    private final String id;
+
+    private String noteName;
 
     @StringRes
     private final int noteContent;
@@ -16,16 +17,14 @@ public class Notes implements Parcelable {
     @StringRes
     private final int creationDate;
 
-    public Notes(int noteName, int noteContent, int creationDate) {
-        this.noteName = noteName;
-        this.noteContent = noteContent;
-        this.creationDate = creationDate;
-    }
+    private final String url;
 
     protected Notes(Parcel in) {
-        noteName = in.readInt();
+        id = in.readString();
+        noteName = in.readString();
         noteContent = in.readInt();
         creationDate = in.readInt();
+        url = in.readString();
     }
 
     public static final Creator<Notes> CREATOR = new Creator<Notes>() {
@@ -40,16 +39,35 @@ public class Notes implements Parcelable {
         }
     };
 
-    public int getNoteName() {
+    public String getId() {
+        return id;
+    }
+
+    public String getNoteName() {
         return noteName;
     }
 
+    public void setNoteName(String noteName) {
+        this.noteName = noteName;
+    }
     public int getNoteContent() {
         return noteContent;
     }
 
     public int getCreationDate() {
         return creationDate;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public Notes(String id, String noteName, int noteContent, int creationDate, String url) {
+        this.id = id;
+        this.noteName = noteName;
+        this.noteContent = noteContent;
+        this.creationDate = creationDate;
+        this.url = url;
     }
 
     @Override
@@ -59,8 +77,10 @@ public class Notes implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(noteName);
+        parcel.writeString(id);
+        parcel.writeString(noteName);
         parcel.writeInt(noteContent);
         parcel.writeInt(creationDate);
+        parcel.writeString(url);
     }
 }
