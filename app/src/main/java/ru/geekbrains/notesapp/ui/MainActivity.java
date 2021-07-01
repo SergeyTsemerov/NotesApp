@@ -12,18 +12,18 @@ import android.widget.Toast;
 import com.google.android.material.navigation.NavigationView;
 
 import ru.geekbrains.notesapp.R;
-import ru.geekbrains.notesapp.domain.Notes;
-import ru.geekbrains.notesapp.domain.NotesRepository;
-import ru.geekbrains.notesapp.ui.details.NotesDetailsFragment;
-import ru.geekbrains.notesapp.ui.list.NotesAdapter;
-import ru.geekbrains.notesapp.ui.list.NotesListFragment;
+import ru.geekbrains.notesapp.RouterHolder;
 
-public class MainActivity extends AppCompatActivity implements NotesAdapter.OnNoteClicked {
+public class MainActivity extends AppCompatActivity implements RouterHolder {
+
+    private MainRouter router;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        router = new MainRouter(getSupportFragmentManager());
 
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -43,19 +43,11 @@ public class MainActivity extends AppCompatActivity implements NotesAdapter.OnNo
                 return true;
             }
             if (item.getItemId() == R.id.about) {
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.notes_list_fragment, new AboutButtonFragment())
-                        .addToBackStack(null)
-                        .commit();
+                router.showAbout();
                 return true;
             }
             if (item.getItemId() == R.id.main_screen) {
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.notes_list_fragment ,new NotesListFragment())
-                        .addToBackStack(null)
-                        .commit();
+                router.showMainScreen();
                 return true;
             }
             return false;
@@ -63,25 +55,7 @@ public class MainActivity extends AppCompatActivity implements NotesAdapter.OnNo
     }
 
     @Override
-    public void onNoteClicked(Notes note) {
-        Toast.makeText(this, note.getCreationDate(), Toast.LENGTH_SHORT).show();
-
-        boolean isLandscape = getResources().getBoolean(R.bool.isLandscape);
-
-        if (isLandscape) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.notes_details_fragment, NotesDetailsFragment.newInstance(note))
-                    .commit();
-
-        } else {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.notes_list_fragment, NotesDetailsFragment.newInstance(note))
-                    .addToBackStack(null)
-                    .commit();
-        }
+    public MainRouter getMainRouter() {
+        return router;
     }
-
-
 }

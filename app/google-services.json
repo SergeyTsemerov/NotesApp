@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "393662791622",
+    "project_id": "notesapp-50edb",
+    "storage_bucket": "notesapp-50edb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:393662791622:android:df7dbb01565c4bf9adfcc7",
+        "android_client_info": {
+          "package_name": "ru.geekbrains.notesapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "393662791622-l0gfdlcroit3rgu8c5e7pr76jqa7dr80.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ru.geekbrains.notesapp",
+            "certificate_hash": "56c6db7dcbd5637833642721c76f02acab6160e7"
+          }
+        },
+        {
+          "client_id": "393662791622-um0qirvou1prq0kfiiivjrcocdo3e6vu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7YF1R65vijSEwjiPqVmKWZg9CVmn4g-Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "393662791622-um0qirvou1prq0kfiiivjrcocdo3e6vu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

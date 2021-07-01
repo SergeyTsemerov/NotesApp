@@ -11,19 +11,14 @@ public class Notes implements Parcelable {
 
     private String noteName;
 
-    @StringRes
-    private final int noteContent;
-
-    @StringRes
-    private final int creationDate;
+    private final String noteContent;
 
     private final String url;
 
     protected Notes(Parcel in) {
         id = in.readString();
         noteName = in.readString();
-        noteContent = in.readInt();
-        creationDate = in.readInt();
+        noteContent = in.readString();
         url = in.readString();
     }
 
@@ -50,23 +45,19 @@ public class Notes implements Parcelable {
     public void setNoteName(String noteName) {
         this.noteName = noteName;
     }
-    public int getNoteContent() {
-        return noteContent;
-    }
 
-    public int getCreationDate() {
-        return creationDate;
+    public String getNoteContent() {
+        return noteContent;
     }
 
     public String getUrl() {
         return url;
     }
 
-    public Notes(String id, String noteName, int noteContent, int creationDate, String url) {
+    public Notes(String id, String noteName, String noteContent, String url) {
         this.id = id;
         this.noteName = noteName;
         this.noteContent = noteContent;
-        this.creationDate = creationDate;
         this.url = url;
     }
 
@@ -79,8 +70,7 @@ public class Notes implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(id);
         parcel.writeString(noteName);
-        parcel.writeInt(noteContent);
-        parcel.writeInt(creationDate);
+        parcel.writeString(noteContent);
         parcel.writeString(url);
     }
 }

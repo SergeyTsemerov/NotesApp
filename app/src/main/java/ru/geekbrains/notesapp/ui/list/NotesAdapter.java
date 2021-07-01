@@ -70,6 +70,21 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         notes.remove(longClickedNote);
     }
 
+    public void edit(Notes note) {
+        for (int i = 0; i < notes.size(); i++) {
+
+            Notes item = notes.get(i);
+
+            if (item.getId().equals(note.getId())) {
+
+                notes.remove(i);
+                notes.add(i, note);
+
+                return;
+            }
+        }
+    }
+
     @NonNull
     @Override
     public NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -83,12 +98,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
         Notes note = notes.get(position);
 
-        holder.noteName.setText(note.getNoteName());
-
-        Glide.with(holder.image)
-                .load(note.getUrl())
-                .centerCrop()
-                .into(holder.image);
+        holder.bind(note);
     }
 
     @Override
@@ -124,6 +134,15 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
             noteName = itemView.findViewById(R.id.note_name);
             image = itemView.findViewById(R.id.image);
+        }
+
+        public void bind(Notes note) {
+            noteName.setText(note.getNoteName());
+
+            Glide.with(image)
+                    .load(note.getUrl())
+                    .centerCrop()
+                    .into(image);
         }
     }
 }
