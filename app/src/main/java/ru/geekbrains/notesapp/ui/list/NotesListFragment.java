@@ -7,13 +7,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Collections;
 
@@ -160,12 +164,17 @@ public class NotesListFragment extends Fragment {
         }
         if (item.getItemId() == R.id.delete_btn) {
 
-            notesRepository.remove(longClickedNote, result -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext())
+                    .setTitle(R.string.alert_dialog_title)
+                    .setPositiveButton(R.string.positive_btn, (dialogInterface, i) -> notesRepository.remove(longClickedNote, result -> {
+                        Toast.makeText(requireContext(), "Удаление заметки", Toast.LENGTH_SHORT).show();
+                        notesAdapter.remove(longClickedNote);
+                        notesAdapter.notifyItemRemoved(longClickedIndex);
+                    }))
+                    .setNegativeButton(R.string.negative_btn, (dialogInterface, i) ->
+                            Toast.makeText(requireContext(), "Отмена удаления", Toast.LENGTH_SHORT).show());
 
-                notesAdapter.remove(longClickedNote);
-
-                notesAdapter.notifyItemRemoved(longClickedIndex);
-            });
+            builder.show();
 
             return true;
         }
