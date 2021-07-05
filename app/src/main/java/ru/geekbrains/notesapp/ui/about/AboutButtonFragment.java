@@ -1,4 +1,4 @@
-package ru.geekbrains.notesapp.ui;
+package ru.geekbrains.notesapp.ui.about;
 
 import android.os.Bundle;
 
