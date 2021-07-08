@@ -15,5 +15,5 @@ public interface NotesRepositoryInterface {
 
     void remove(Notes notes, Callback<Object> callback);
 
-    Notes edit(@NonNull Notes notes, @Nullable String noteName);
+    void edit(@NonNull Notes notes, @Nullable String noteName, Callback<Notes> callback);
 }

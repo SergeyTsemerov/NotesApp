@@ -59,7 +59,8 @@ public class NotesRepository implements NotesRepositoryInterface {
         callback.onSuccess(note);
     }
 
-    public Notes edit(@NonNull Notes notes, @Nullable String noteName) {
+    @Override
+    public void edit(@NonNull Notes notes, @Nullable String noteName, Callback<Notes> callback) {
 
         for (int i = 0; i < result.size(); i++) {
 
@@ -78,10 +79,10 @@ public class NotesRepository implements NotesRepositoryInterface {
                 result.remove(i);
                 result.add(i, newNote);
 
-                return newNote;
+                callback.onSuccess(newNote);
             }
         }
 
-        return notes;
+        callback.onSuccess(notes);
     }
 }

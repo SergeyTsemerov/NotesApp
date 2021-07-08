@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import ru.geekbrains.notesapp.R;
 import ru.geekbrains.notesapp.RouterHolder;
+import ru.geekbrains.notesapp.domain.Callback;
 import ru.geekbrains.notesapp.domain.Notes;
 import ru.geekbrains.notesapp.domain.NotesFirestoreRepository;
 import ru.geekbrains.notesapp.domain.NotesRepositoryInterface;
@@ -54,19 +55,19 @@ public class EditNoteFragment extends Fragment {
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.edit_check) {
 
-                Notes result = notesRepository.edit(notes, noteName.getText().toString());
+                notesRepository.edit(notes, noteName.getText().toString(), result -> {
+                    if (requireActivity() instanceof RouterHolder) {
+                        MainRouter router = ((RouterHolder) requireActivity()).getMainRouter();
 
-                if (requireActivity() instanceof RouterHolder) {
-                    MainRouter router = ((RouterHolder) requireActivity()).getMainRouter();
+                        Bundle bundle = new Bundle();
 
-                    Bundle bundle = new Bundle();
+                        bundle.putParcelable(ARG_NOTE, result);
 
-                    bundle.putParcelable(ARG_NOTE, result);
+                        getParentFragmentManager().setFragmentResult(UPDATE_RESULT, bundle);
 
-                    getParentFragmentManager().setFragmentResult(UPDATE_RESULT, bundle);
-
-                    router.back();
-                }
+                        router.back();
+                    }
+                });
 
                 return true;
             }

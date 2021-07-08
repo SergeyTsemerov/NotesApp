@@ -7,6 +7,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,7 +35,13 @@ public class NotesFirestoreRepository implements NotesRepositoryInterface {
 
                         ArrayList<Notes> result = new ArrayList<>();
 
-                        for (QueryDocumentSnapshot document: task.getResult()) {
+                        QuerySnapshot querySnapshot = task.getResult();
+
+                        if (querySnapshot == null) {
+                            return;
+                        }
+
+                        for (QueryDocumentSnapshot document : querySnapshot) {
                             String noteName = (String) document.get(NOTE_NAME);
                             String noteContent = (String) document.get(NOTE_CONTENT);
                             String image = (String) document.get(IMAGE);
@@ -77,18 +84,22 @@ public class NotesFirestoreRepository implements NotesRepositoryInterface {
         firebaseFirestore.collection(NOTES)
                 .document(notes.getId())
                 .delete()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            callback.onSuccess(notes);
-                        }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        callback.onSuccess(notes);
                     }
                 });
     }
 
     @Override
-    public Notes edit(@NonNull Notes notes, @Nullable String noteName) {
-        return null;
+    public void edit(@NonNull Notes notes, @Nullable String noteName, Callback<Notes> callback) {
+        firebaseFirestore.collection(NOTES)
+                .document(notes.getId())
+                .update(NOTE_NAME, noteName)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        callback.onSuccess(notes);
+                    }
+                });
     }
 }
