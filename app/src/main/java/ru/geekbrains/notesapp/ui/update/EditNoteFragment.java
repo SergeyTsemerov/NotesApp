@@ -65,7 +65,7 @@ public class EditNoteFragment extends Fragment {
 
                         getParentFragmentManager().setFragmentResult(UPDATE_RESULT, bundle);
 
-                        router.back();
+                        router.showMainScreen();
                     }
                 });
 
