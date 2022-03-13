@@ -5,16 +5,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import ru.geekbrains.notesapp.R;
 import ru.geekbrains.notesapp.domain.Notes;
 
@@ -72,14 +68,10 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
     public void edit(Notes note) {
         for (int i = 0; i < notes.size(); i++) {
-
             Notes item = notes.get(i);
-
             if (item.getId().equals(note.getId())) {
-
                 notes.remove(i);
                 notes.add(i, note);
-
                 return;
             }
         }
@@ -138,7 +130,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
         public void bind(Notes note) {
             noteName.setText(note.getNoteName());
-
             Glide.with(image)
                     .load(note.getUrl())
                     .centerCrop()

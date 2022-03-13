@@ -38,7 +38,6 @@ public class NotesRepository implements NotesRepositoryInterface {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
             handler.post(() -> callback.onSuccess(result));
         });
     }
@@ -55,34 +54,24 @@ public class NotesRepository implements NotesRepositoryInterface {
 
     public void remove(Notes note, Callback<Object> callback) {
         result.remove(note);
-
         callback.onSuccess(note);
     }
 
     @Override
     public void edit(@NonNull Notes notes, @Nullable String noteName, Callback<Notes> callback) {
-
         for (int i = 0; i < result.size(); i++) {
-
             Notes item = result.get(i);
-
             if (item.getId().equals(notes.getId())) {
-
                 String noteNameSet = item.getNoteName();
-
                 if (noteName != null) {
                     noteNameSet = noteName;
                 }
-
                 Notes newNote = new Notes(notes.getId(), noteNameSet, notes.getNoteContent(), notes.getUrl());
-
                 result.remove(i);
                 result.add(i, newNote);
-
                 callback.onSuccess(newNote);
             }
         }
-
         callback.onSuccess(notes);
     }
 }

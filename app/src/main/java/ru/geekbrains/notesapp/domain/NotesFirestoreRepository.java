@@ -3,8 +3,6 @@ package ru.geekbrains.notesapp.domain;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -30,34 +28,22 @@ public class NotesFirestoreRepository implements NotesRepositoryInterface {
         firebaseFirestore.collection(NOTES)
                 .get()
                 .addOnCompleteListener(task -> {
-
                     if (task.isSuccessful()) {
-
                         ArrayList<Notes> result = new ArrayList<>();
-
                         QuerySnapshot querySnapshot = task.getResult();
-
                         if (querySnapshot == null) {
                             return;
                         }
-
                         for (QueryDocumentSnapshot document : querySnapshot) {
                             String noteName = (String) document.get(NOTE_NAME);
                             String noteContent = (String) document.get(NOTE_CONTENT);
                             String image = (String) document.get(IMAGE);
                             result.add(new Notes(document.getId(), noteName, noteContent, image));
                         }
-
                         callback.onSuccess(result);
-
                     } else
                         task.getException();
                 });
-
-    }
-
-    @Override
-    public void clear() {
 
     }
 
